@@ -3,7 +3,6 @@ public class Converter {
     double rateEUR;
     double rateJPY;
 
-    // Constructor
     Converter(double usd, double eur, double jpy) {
         rateUSD = usd;
         rateEUR = eur;
