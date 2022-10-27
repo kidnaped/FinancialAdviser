@@ -1,59 +1,94 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 public class ExpensesManager {
-    ArrayList<Double> expenses;
+    HashMap<String, ArrayList<Double>> expensesByCategories;
 
     ExpensesManager() {
-        expenses = new ArrayList<>();
+        expensesByCategories = new HashMap<>();
     }
 
-    double saveExpense(double moneyBeforeSalary, double expense) {
+    double saveExpense(double moneyBeforeSalary, String category, double expense) {
         moneyBeforeSalary = moneyBeforeSalary - expense;
-        expenses.add(expense);
         System.out.println("Значение сохранено! Ваш текущий баланс в рублях: " + moneyBeforeSalary);
+        if (expensesByCategories.containsKey(category)) {
+            ArrayList<Double> newExpense = expensesByCategories.get(category);
+            newExpense.add(expense);
+        } else {
+            ArrayList<Double> newExpense = new ArrayList<>();
+            newExpense.add(expense);
+            expensesByCategories.put(category, newExpense);
+        }
+
         if (moneyBeforeSalary < 1000) {
             System.out.println("На вашем счету осталось совсем немного. Стоит начать экономить!");
         }
         return moneyBeforeSalary;
     }
 
-    double findMaxExpense() {
+    double findMaxExpenseInCategory(String category) {
         double maxExpense = 0;
-        for (Double expense : expenses) {
-            if (expense > maxExpense) {
-                maxExpense = expense;
+        if (expensesByCategories.containsKey(category)) {
+            ArrayList<Double> expenses = expensesByCategories.get(category);
+            for (Double expense : expenses) {
+                if (expense > maxExpense) {
+                    maxExpense = expense;
+                }
             }
+        } else {
+            System.out.println("Такой категории пока нет.");
         }
+
         return maxExpense;
     }
 
-    void printAllExpenses() {
-        for (int i = 0; i < expenses.size(); i++) {
-            System.out.println("День " + (i + 1) + ". Потрачено " + expenses.get(i) + " рублей");
+    void printAllExpensesByCategories() {
+        for (String category : expensesByCategories.keySet()) {
+            System.out.println(category);
+            for (Double expense : expensesByCategories.get(category)) {
+                System.out.println(expense);
+            }
         }
     }
 
     void removeAllExpenses() {
-        expenses.clear();
+        expensesByCategories.clear();
         System.out.println("Список трат пуст.");
     }
 
-    void removeExpense(double expense) {
-        if (expenses.size() != 0) {
-            if (expenses.contains(expense)) {
-                int index = 0;
-                for (int i = 0; i < expenses.size(); i++) {
-                    if (expenses.get(i) == expense) {
-                        index = i;
-                        break;
-                    }
-                }
-                expenses.remove(index);
-                System.out.println("Трата удалена!");
-            } else {
-                System.out.println("Такой траты нет.");
+    double getExpensesSum() {
+        double sum = 0d;
+        for (String category : expensesByCategories.keySet()) {
+            for (Double expense : expensesByCategories.get(category)) {
+                sum += expense;
             }
+        }
+
+        return sum;
+    }
+
+    String getMaxCategoryName() {
+        String maxCategoryName = "";
+        double maxCategorySum = 0d;
+
+        for (String category : expensesByCategories.keySet()) {
+            double sum = 0d;
+            for (Double expense : expensesByCategories.get(category)) {
+                sum += expense;
+                if (maxCategorySum < sum) {
+                    maxCategorySum = sum;
+                    maxCategoryName = category;
+                }
+            }
+        }
+        return maxCategoryName;
+    }
+
+    void removeCategory(String category) {
+        if (expensesByCategories.containsKey(category)) {
+            expensesByCategories.remove(category);
+            System.out.println("Категория " + category + " удалена!");
         } else {
-            System.out.println("Список трат пуст.");
+            System.out.println("Такой категории не существует.");
         }
     }
 }
