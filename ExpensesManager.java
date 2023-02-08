@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
+
+@Deprecated
 public class ExpensesManager {
     HashMap<String, ArrayList<Double>> expensesByCategories;
 
@@ -7,9 +10,10 @@ public class ExpensesManager {
         expensesByCategories = new HashMap<>();
     }
 
-    double saveExpense(double moneyBeforeSalary, String category, double expense) {
+    public double saveExpense(double moneyBeforeSalary, String category, double expense) {
         moneyBeforeSalary = moneyBeforeSalary - expense;
         System.out.println("Значение сохранено! Ваш текущий баланс в рублях: " + moneyBeforeSalary);
+
         if (expensesByCategories.containsKey(category)) {
             ArrayList<Double> newExpense = expensesByCategories.get(category);
             newExpense.add(expense);
@@ -25,7 +29,7 @@ public class ExpensesManager {
         return moneyBeforeSalary;
     }
 
-    double findMaxExpenseInCategory(String category) {
+    public double findMaxExpenseInCategory(String category) {
         double maxExpense = 0;
         if (expensesByCategories.containsKey(category)) {
             ArrayList<Double> expenses = expensesByCategories.get(category);
@@ -41,7 +45,7 @@ public class ExpensesManager {
         return maxExpense;
     }
 
-    void printAllExpensesByCategories() {
+    public void printAllExpensesByCategories() {
         for (String category : expensesByCategories.keySet()) {
             System.out.println(category);
             for (Double expense : expensesByCategories.get(category)) {
@@ -50,12 +54,12 @@ public class ExpensesManager {
         }
     }
 
-    void removeAllExpenses() {
+    public void removeAllExpenses() {
         expensesByCategories.clear();
         System.out.println("Список трат пуст.");
     }
 
-    double getExpensesSum() {
+    public double getExpensesSum() {
         double sum = 0d;
         for (String category : expensesByCategories.keySet()) {
             for (Double expense : expensesByCategories.get(category)) {
@@ -66,7 +70,7 @@ public class ExpensesManager {
         return sum;
     }
 
-    String getMaxCategoryName() {
+    public String getMaxCategoryName() {
         String maxCategoryName = "";
         double maxCategorySum = 0d;
 
@@ -83,7 +87,7 @@ public class ExpensesManager {
         return maxCategoryName;
     }
 
-    void removeCategory(String category) {
+    public void removeCategory(String category) {
         if (expensesByCategories.containsKey(category)) {
             expensesByCategories.remove(category);
             System.out.println("Категория " + category + " удалена!");
